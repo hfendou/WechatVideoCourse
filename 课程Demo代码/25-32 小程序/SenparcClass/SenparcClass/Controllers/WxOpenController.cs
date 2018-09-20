@@ -173,7 +173,7 @@ namespace SenparcClass.Controllers
             {
                 //Session["WxOpenUser"] = jsonResult;//使用Session保存登陆信息（不推荐）
                 //使用SessionContainer管理登录信息（推荐）
-                var sessionBag = SessionContainer.UpdateSession(null, jsonResult.openid, jsonResult.session_key);
+                var sessionBag = SessionContainer.UpdateSession("ApartmentRent", jsonResult.openid, jsonResult.session_key);
 
                 //注意：生产环境下SessionKey属于敏感信息，不能进行传输！
                 return Json(new { success = true, msg = "OK", sessionId = sessionBag.Key, sessionKey = sessionBag.SessionKey });
@@ -203,6 +203,7 @@ namespace SenparcClass.Controllers
         public ActionResult DecodeEncryptedData(string type, string sessionId, string encryptedData, string iv)
         {
             DecodeEntityBase decodedEntity = null;
+           string openid= SessionContainer.GetSession("ApartmentRent").OpenId;
             switch (type.ToUpper())
             {
                 case "USERINFO"://wx.getUserInfo()
